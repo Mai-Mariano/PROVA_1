@@ -1,0 +1,78 @@
+version: "3.9"
+
+############################
+#  REDE ÚNICA COMPARTILHADA
+############################
+networks:
+  backend:
+    driver: bridge
+
+############################
+#  SERVIÇOS
+############################
+services:
+
+  # ---------- DEPENDÊNCIAS ----------
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks: [backend]
+    healthcheck:               # ← para que depends_on use condição healthy
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    networks: [backend]
+    ports:
+      - "5672:5672"            # AMQP
+      - "15672:15672"          # UI : http://localhost:15672 (guest/guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running", "--quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ---------- MICRO-SERVIÇOS ----------
+  sensors-node:
+    build: ./sensors-node
+    env_file: ./sensors-node/.env
+    environment:               # garante hostnames corretos, mesmo se .env faltar
+      REDIS_URL: redis://redis:6379
+      PYTHON_API: http://events-python:5000/event
+    depends_on:
+      redis:    { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks: [backend]
+
+  events-python:
+    build: ./events-python
+    env_file: ./events-python/.env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+    depends_on:
+      redis:    { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    networks: [backend]
+
+  logistics-php:
+    build: ./logistics-php
+    env_file: ./logistics-php/.env
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks: [backend]
