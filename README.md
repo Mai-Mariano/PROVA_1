@@ -4,7 +4,7 @@ Para rodar a aplicação precisamos rodar
 
 docker compose up -d
 
-## 📡 Testes rápidos via **cURL**
+##  Testes rápidos via **cURL**
 
 ```bash
 #  Gera uma leitura de sensores (GET)
