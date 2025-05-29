@@ -68,14 +68,15 @@ O Redis atua como intermediário dos dados temporários:
 
 Comunicação em ambiente Docker
 Todas as APIs se conectam entre si pelo nome do serviço Docker Compose (sensors-node, events-python, logistics-php). Por exemplo:
-*	O PHP publica para o RabbitMQ no host rabbitmq.
+*     O PHP publica para o RabbitMQ no host rabbitmq.
 *	O Python consome dessa mesma fila, ouvindo o host rabbitmq.
 
 ![image](https://github.com/user-attachments/assets/9cf9d372-be9a-4aeb-9475-a42d68f486b5)
 
 ## Onde o cache Redis foi usado?
+
 API de Sensores (Node.js)
-*      Ao acessar o endpoint GET /sensor-data, os dados simulados de temperatura e pressão ficam armazenados em cache no Redis por um tempo definido (TTL).
+*     Ao acessar o endpoint GET /sensor-data, os dados simulados de temperatura e pressão ficam armazenados em cache no Redis por um tempo definido (TTL).
 *     Isso evita que os mesmos dados sejam gerados repetidamente a cada requisição, melhorando a performance da API.
 
 API de Eventos Críticos (Python)
