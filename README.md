@@ -1,4 +1,37 @@
+Aplicação está em Docker.
+
+Para rodar a aplicação precisamos rodar
+
+docker compose up -d
+
+## 📡 Testes rápidos via **cURL**
+
+```bash
+#  Gera uma leitura de sensores (GET)
+curl -X GET http://localhost:3000/sensor-data
+
+# Disparar um alerta síncrono (POST)
+curl -X POST http://localhost:3000/alert \
+     -H "Content-Type: application/json" \
+     -d '{"msg":"Pressão acima do limiar!"}'
+
+# Criar um despacho logístico na fila RabbitMQ (POST)
+curl -X POST http://localhost:8000/dispatch \
+     -H "Content-Type: application/json" \
+     -d '{"equipment":"Válvula de segurança","priority":"Alta"}'
+
+#  Lista os equipamentos simulados (GET)
+curl -X GET http://localhost:8000/equipments
+
+# Consulta  histórico de eventos (GET)
+curl -X GET http://localhost:5000/events
+
+
+-------------------------
+
+
 O que cada API faz e como executá-la?
+
 
 API NODE – A API simula a leitura de sensores de temperatura e pressão em poços de petróleo. Ela possui dois endpoints principais:
 •	GET /sensor-data: gera e retorna dados simulados. Os dados são armazenados em cache no Redis para evitar consultas repetidas em curto prazo.
@@ -25,7 +58,7 @@ Quando a API de sensores detecta uma condição crítica, ela envia um alerta vi
 Exemplo: POST http://events-python:5000/event
 
 Logística (PHP) → Eventos Críticos (Python)
-A API de logística publica uma mensagem na fila RabbitMQ (logistics) ao receber uma ordem de despacho.
+A API de logística publica uma mensagem na fila RabbitMQ (logistics) quando receber uma ordem de despacho.
 A API Python possui um consumer (consumidor) em background que escuta essa fila e registra o evento como se fosse mais um alerta crítico.
 
 Redis como cache compartilhado:
