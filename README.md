@@ -25,7 +25,7 @@ curl -X GET http://localhost:8000/equipments
 
 # Consulta  histórico de eventos (GET)
 curl -X GET http://localhost:5000/events
-
+```
 
 -------------------------
 
