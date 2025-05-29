@@ -1,7 +1,8 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';          // ← carrega autoloader
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+$dotenv->load();                                 // agora $_ENV está populado
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
