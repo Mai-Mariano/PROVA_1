@@ -30,7 +30,7 @@ curl -X GET http://localhost:5000/events
 -------------------------
 
 
-O que cada API faz e como executá-la?
+## O que cada API faz e como executá-la?
 
 
 API NODE (3000) – A API faz a simulção da leitura de sensores de temperatura e da pressão em poços de petróleo. Ela tem dois endpoints principais:
@@ -74,9 +74,8 @@ Todas as APIs se conectam entre si pelo nome do serviço Docker Compose (sensors
 ![image](https://github.com/user-attachments/assets/9cf9d372-be9a-4aeb-9475-a42d68f486b5)
 
 ## Onde o cache Redis foi usado?
-
 API de Sensores (Node.js)
-*     Ao acessar o endpoint GET /sensor-data, os dados simulados de temperatura e pressão ficam armazenados em cache no Redis por um tempo definido (TTL).
+*      Ao acessar o endpoint GET /sensor-data, os dados simulados de temperatura e pressão ficam armazenados em cache no Redis por um tempo definido (TTL).
 *     Isso evita que os mesmos dados sejam gerados repetidamente a cada requisição, melhorando a performance da API.
 
 API de Eventos Críticos (Python)
