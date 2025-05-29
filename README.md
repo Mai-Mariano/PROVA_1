@@ -87,10 +87,10 @@ API de Eventos Críticos (Python)
 
 ## Como a fila RabbitMQ entra no fluxo?
 
-A API de Logística (PHP) publica uma mensagem na fila do RabbitMQ sempre que o endpoint POST /dispatch é chamado. Essa mensagem representa uma solicitação urgente de transporte ou entrega de equipamentos.
-A API de Eventos (Python) possui um consumidor rodando em segundo plano (via consumer.py) que fica escutando esta fila.
-Quando uma nova mensagem é publicada pela API PHP, o consumidor a recebe automaticamente e a adiciona à lista de eventos críticos no Redis.
-Dessa forma, a API de Logística não precisa mais esperar a resposta da API Python.
+*     A API de Logística (PHP) publica uma mensagem na fila do RabbitMQ sempre que o endpoint POST /dispatch é chamado. Essa mensagem representa uma solicitação urgente de transporte ou entrega de equipamentos.
+*     A API de Eventos (Python) possui um consumidor rodando em segundo plano (via consumer.py) que fica escutando esta fila.
+*     Quando uma nova mensagem é publicada pela API PHP, o consumidor a recebe automaticamente e a adiciona à lista de eventos críticos no Redis.
+*     Dessa forma, a API de Logística não precisa mais esperar a resposta da API Python.
 
 
 
