@@ -1,23 +1,16 @@
 version: "3.9"
 
-############################
-#  REDE ÚNICA COMPARTILHADA
-############################
 networks:
   backend:
     driver: bridge
 
-############################
-#  SERVIÇOS
-############################
 services:
 
-  # ---------- DEPENDÊNCIAS ----------
   redis:
     image: redis:7-alpine
     restart: unless-stopped
     networks: [backend]
-    healthcheck:               # ← para que depends_on use condição healthy
+    healthcheck:             
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
@@ -28,19 +21,19 @@ services:
     restart: unless-stopped
     networks: [backend]
     ports:
-      - "5672:5672"            # AMQP
-      - "15672:15672"          # UI : http://localhost:15672 (guest/guest)
+      - "5672:5672"          
+      - "15672:15672"         
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "check_running", "--quiet"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  # ---------- MICRO-SERVIÇOS ----------
+
   sensors-node:
     build: ./sensors-node
     env_file: ./sensors-node/.env
-    environment:               # garante hostnames corretos, mesmo se .env faltar
+    environment:               
       REDIS_URL: redis://redis:6379
       PYTHON_API: http://events-python:5000/event
     depends_on:
