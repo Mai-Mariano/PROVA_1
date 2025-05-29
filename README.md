@@ -80,17 +80,17 @@ API de Sensores (Node.js)
 *  Isso evita que os mesmos dados sejam gerados repetidamente a cada requisição, melhorando a performance da API.
 
 API de Eventos Críticos (Python)
-*      A lista de eventos recebidos (via HTTP ou RabbitMQ) é armazenada em uma lista Redis com a chave events:list.
-*      Cada vez que um novo evento chega, a lista no Redis é atualizada.
-*      Quando o endpoint GET /events é acessado, os dados são recuperados diretamente do Redis.
+*  A lista de eventos recebidos (via HTTP ou RabbitMQ) é armazenada em uma lista Redis com a chave events:list.
+*  Cada vez que um novo evento chega, a lista no Redis é atualizada.
+*  Quando o endpoint GET /events é acessado, os dados são recuperados diretamente do Redis.
 
 
 ## Como a fila RabbitMQ entra no fluxo?
 
-*     A API de Logística (PHP) publica uma mensagem na fila do RabbitMQ sempre que o endpoint POST /dispatch é chamado. Essa mensagem representa uma solicitação urgente de transporte ou entrega de equipamentos.
-*     A API de Eventos (Python) possui um consumidor rodando em segundo plano (via consumer.py) que fica escutando esta fila.
-*     Quando uma nova mensagem é publicada pela API PHP, o consumidor a recebe automaticamente e a adiciona à lista de eventos críticos no Redis.
-*     Dessa forma, a API de Logística não precisa mais esperar a resposta da API Python.
+*  A API de Logística (PHP) publica uma mensagem na fila do RabbitMQ sempre que o endpoint POST /dispatch é chamado. Essa mensagem representa uma solicitação urgente de transporte ou entrega de equipamentos.
+*  A API de Eventos (Python) possui um consumidor rodando em segundo plano (via consumer.py) que fica escutando esta fila.
+*  Quando uma nova mensagem é publicada pela API PHP, o consumidor a recebe automaticamente e a adiciona à lista de eventos críticos no Redis.
+*  Dessa forma, a API de Logística não precisa mais esperar a resposta da API Python.
 
 
 
